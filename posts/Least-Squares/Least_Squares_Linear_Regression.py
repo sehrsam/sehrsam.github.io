@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class linearSquares():
     def __init__(self):
         self.w = None
@@ -7,9 +8,7 @@ class linearSquares():
 
     def P_compute(self, X):
         return X.T@X
-    
 
-    
     def q_compute(self, X, y):
         return X.T@y
 
@@ -35,5 +34,5 @@ class linearSquares():
         return X_.dot(self.w)
 
     def score(self, X, y):
-        
+
         return 1 - np.sum((y - self.predict(X))**2) / np.sum((y - np.mean(y))**2)
