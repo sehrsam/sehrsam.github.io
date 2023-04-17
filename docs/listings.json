@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/Penguins/Penguins.html",
       "/posts/perceptron/Perceptron_blog_post.html",
       "/posts/Least-Squares/LeastSquaresBlogPost.html",
       "/posts/example-blog-post/index.html"
