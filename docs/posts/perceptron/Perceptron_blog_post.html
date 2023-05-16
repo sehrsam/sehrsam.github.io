@@ -204,74 +204,91 @@ background: img/landscape.png;
 </div>
 </div>
 <p>Here we have plotted the points. We can clearly see that they are linearly seperable. We now run our perceptron algorithm on them to find it.</p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> perceptron <span class="im">import</span> Perceptron</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> Perceptron()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p.fit(X, y, <span class="dv">1000</span>)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[0.02, 0.02, 0.48, 0.99, 0.13, 0.56, 0.05, 0.92, 0.03, 0.9, 0.0, 0.63, 0.0, 0.03, 1.0]</code></pre>
+<pre><code>[0.07, 0.18, 0.02, 0.33, 0.87, 0.48, 0.07, 0.35, 0.04, 0.07, 0.93, 0.45, 0.97, 0.99, 0.94, 0.09, 0.83, 0.01, 0.99, 0.85, 0.03, 0.28, 0.0, 0.02, 0.99, 0.76, 0.05, 0.71, 0.1, 0.01, 0.02, 0.65, 0.82, 0.07, 0.56, 0.05, 0.07, 0.95, 0.06, 0.99, 0.01, 0.98, 0.03, 0.01, 0.82, 0.01, 0.07, 0.88, 0.07, 0.94, 0.9, 0.03, 1.0]</code></pre>
 </div>
 </div>
 <p>After running the algorithm, we can print the history variable of the perceptron. This allows us to view the progression of our perceptron, and see how it oscillates between being more and less accurate before arriving at a w value which gives us a linear classifier.</p>
-<div class="cell">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> draw_line(w, x_min, x_max):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  x <span class="op">=</span> np.linspace(x_min, x_max, <span class="dv">101</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> <span class="op">-</span>(w[<span class="dv">0</span>]<span class="op">*</span>x <span class="op">+</span> w[<span class="dv">2</span>])<span class="op">/</span>w[<span class="dv">1</span>]</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  plt.plot(x, y, color <span class="op">=</span> <span class="st">"black"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> draw_line(p.w, <span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> draw_line(p.w, <span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Perceptron_blog_post_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <p>We can then graph this linear classifier, and see how it neatly bisects our two groups of data points.</p>
 <p>Next, we will examine two groups of data points which are not linearly seperable.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X_1, y_1 <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> p_features <span class="op">-</span> <span class="dv">1</span>, centers <span class="op">=</span> [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">0</span>)])</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X_1[:,<span class="dv">0</span>], X_1[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p_features <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>X_1, y_1 <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> p_features <span class="op">-</span> <span class="dv">1</span>, centers <span class="op">=</span> [(<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">0</span>,<span class="dv">0</span>)])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X_1[:,<span class="dv">0</span>], X_1[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Perceptron_blog_post_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <p>After graphing the points, it is clear that they are not linearly seperable. As such, if we run our perceptron on them we would expect it to not find a linear classifier, and to run until it has reached the maximum allowed runs</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p.fit(X_1, y_1, <span class="dv">100</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>p.fit(X_1, y_1, <span class="dv">100</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[0.49, 0.44, 0.46, 0.46, 0.45, 0.5, 0.59, 0.55, 0.54, 0.56, 0.5, 0.56, 0.56, 0.56, 0.59, 0.56, 0.53, 0.52, 0.5, 0.5, 0.52, 0.47, 0.5, 0.51, 0.51, 0.51, 0.53, 0.47, 0.46, 0.53, 0.49, 0.51, 0.46, 0.51, 0.47, 0.48, 0.47, 0.45, 0.5, 0.51, 0.49, 0.51, 0.48, 0.57, 0.47, 0.44, 0.47, 0.46, 0.53, 0.5, 0.45, 0.51, 0.5, 0.57, 0.5, 0.46, 0.56, 0.49, 0.45, 0.47, 0.56, 0.45, 0.5, 0.46, 0.48, 0.43, 0.5, 0.43, 0.5, 0.48, 0.51, 0.5, 0.53, 0.51, 0.52, 0.6, 0.5, 0.46, 0.52, 0.49, 0.46, 0.47, 0.47, 0.44, 0.55, 0.57, 0.54, 0.51, 0.47, 0.49, 0.54, 0.54, 0.5, 0.42, 0.5, 0.44, 0.44, 0.46, 0.5, 0.52]</code></pre>
+</div>
 </div>
 <p>Doing this, we see what we expected. Our perceptron runs for the maximum allowed time, and never comes up with a w that produces a 1.0 accuracy.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X_1[:,<span class="dv">0</span>], X_1[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> draw_line(p.w, <span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.scatter(X_1[:,<span class="dv">0</span>], X_1[:,<span class="dv">1</span>], c <span class="op">=</span> y)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> draw_line(p.w, <span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>xlab <span class="op">=</span> plt.xlabel(<span class="st">"Feature 1"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>ylab <span class="op">=</span> plt.ylabel(<span class="st">"Feature 2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="Perceptron_blog_post_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
 </div>
 <p>Plotting the line given by w we get a random line, which makes sense.</p>
 <p>We can now try running the perceptron on data with more than 2 features. We can generate the points, and run our perceptron on them.</p>
 <div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>X_2, y_2 <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> <span class="dv">5</span>, centers<span class="op">=</span>[(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)])</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>p.fit(X_2, y_2, <span class="dv">200</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>X_2, y_2 <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> <span class="dv">5</span>, centers<span class="op">=</span>[(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>),(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)])</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>p.fit(X_2, y_2, <span class="dv">200</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[0.63, 0.61, 0.64, 0.37, 0.49, 0.61, 0.63, 0.7, 0.57, 0.7, 0.57, 0.58, 0.55, 0.54, 0.51, 0.49, 0.54, 0.71, 0.6, 0.46, 0.64, 0.39, 0.35, 0.31, 0.44, 0.22, 0.4, 0.25, 0.31, 0.54, 0.65, 0.49, 0.56, 0.62, 0.63, 0.36, 0.36, 0.42, 0.34, 0.42, 0.39, 0.59, 0.6, 0.73, 0.51, 0.51, 0.46, 0.51, 0.72, 0.72, 0.78, 0.76, 0.78, 0.62, 0.54, 0.71, 0.56, 0.65, 0.58, 0.49, 0.46, 0.4, 0.49, 0.49, 0.37, 0.37, 0.32, 0.46, 0.56, 0.6, 0.66, 0.28, 0.26, 0.57, 0.36, 0.38, 0.35, 0.26, 0.4, 0.56, 0.5, 0.38, 0.31, 0.26, 0.32, 0.49, 0.5, 0.56, 0.58, 0.59, 0.43, 0.59, 0.59, 0.61, 0.68, 0.43, 0.64, 0.35, 0.42, 0.59, 0.71, 0.6, 0.54, 0.38, 0.39, 0.44, 0.52, 0.53, 0.46, 0.53, 0.41, 0.36, 0.33, 0.31, 0.49, 0.28, 0.27, 0.55, 0.6, 0.36, 0.33, 0.33, 0.52, 0.3, 0.27, 0.22, 0.56, 0.51, 0.33, 0.49, 0.52, 0.54, 0.59, 0.59, 0.38, 0.43, 0.26, 0.48, 0.31, 0.42, 0.58, 0.59, 0.48, 0.65, 0.7, 0.63, 0.59, 0.43, 0.44, 0.36, 0.41, 0.41, 0.45, 0.39, 0.4, 0.53, 0.37, 0.31, 0.3, 0.52, 0.46, 0.37, 0.66, 0.54, 0.68, 0.44, 0.42, 0.73, 0.35, 0.38, 0.42, 0.51, 0.59, 0.43, 0.28, 0.27, 0.25, 0.23, 0.53, 0.23, 0.55, 0.63, 0.54, 0.54, 0.63, 0.62, 0.61, 0.57, 0.41, 0.58, 0.36, 0.3, 0.44, 0.47, 0.56, 0.45, 0.34, 0.6, 0.39, 0.34]</code></pre>
+<pre><code>[0.68, 0.52, 0.37, 0.53, 0.44, 0.51, 0.55, 0.65, 0.42, 0.41, 0.43, 0.47, 0.48, 0.46, 0.66, 0.49, 0.43, 0.48, 0.72, 0.65, 0.48, 0.55, 0.46, 0.53, 0.74, 0.69, 0.53, 0.44, 0.45, 0.64, 0.72, 0.63, 0.66, 0.51, 0.39, 0.4, 0.46, 0.48, 0.54, 0.47, 0.49, 0.45, 0.36, 0.35, 0.48, 0.42, 0.45, 0.38, 0.55, 0.43, 0.54, 0.51, 0.48, 0.69, 0.67, 0.63, 0.48, 0.46, 0.48, 0.65, 0.59, 0.68, 0.48, 0.65, 0.72, 0.68, 0.69, 0.46, 0.64, 0.65, 0.62, 0.48, 0.43, 0.36, 0.55, 0.46, 0.33, 0.44, 0.5, 0.36, 0.37, 0.54, 0.57, 0.67, 0.67, 0.75, 0.69, 0.69, 0.57, 0.41, 0.48, 0.43, 0.47, 0.56, 0.7, 0.71, 0.69, 0.62, 0.54, 0.54, 0.43, 0.47, 0.33, 0.54, 0.41, 0.38, 0.53, 0.4, 0.49, 0.59, 0.42, 0.46, 0.33, 0.51, 0.57, 0.53, 0.66, 0.65, 0.65, 0.7, 0.68, 0.61, 0.55, 0.54, 0.61, 0.59, 0.74, 0.5, 0.55, 0.49, 0.38, 0.35, 0.57, 0.65, 0.61, 0.43, 0.64, 0.41, 0.36, 0.33, 0.45, 0.54, 0.35, 0.54, 0.36, 0.47, 0.48, 0.36, 0.57, 0.53, 0.42, 0.54, 0.48, 0.33, 0.33, 0.32, 0.29, 0.32, 0.38, 0.35, 0.44, 0.48, 0.37, 0.48, 0.52, 0.34, 0.4, 0.51, 0.39, 0.42, 0.31, 0.3, 0.25, 0.57, 0.39, 0.41, 0.69, 0.7, 0.74, 0.52, 0.47, 0.38, 0.39, 0.48, 0.51, 0.41, 0.62, 0.43, 0.31, 0.41, 0.58, 0.42, 0.41, 0.36, 0.33, 0.39, 0.36, 0.49, 0.57, 0.67]</code></pre>
 </div>
 </div>
 <p>This set of points most likely is not linearly seperable, as the perceptron did not end up arriving at an accuracy of 1.0. If we test again with slightly altered parameters:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X_2, y_2 <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> <span class="dv">7</span>, centers<span class="op">=</span>[(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)])</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>p.fit(X_2, y_2, <span class="dv">200</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X_2, y_2 <span class="op">=</span> make_blobs(n_samples <span class="op">=</span> <span class="dv">100</span>, n_features <span class="op">=</span> <span class="dv">7</span>, centers<span class="op">=</span>[(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>),(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>)])</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p.fit(X_2, y_2, <span class="dv">200</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(p.history)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[0.99, 0.64, 0.08, 0.78, 0.99, 0.24, 0.85, 0.34, 0.04, 0.35, 1.0]</code></pre>
+</div>
 </div>
 <p>We can see that the perceptron can still converge on data sets with multiple functions. As such, we can also determine that this set of points are linearly seperable.</p>
 <p>The runtime of equation 1 is O(p), since the dot product will compute p total multiplications, and it is then added to and multiplied by these same p dimensional arrays, but only a set amount of times, so they don’t add to the complexity.</p>

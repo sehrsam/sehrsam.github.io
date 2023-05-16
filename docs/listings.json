@@ -4,8 +4,12 @@
     "items": [
       "/posts/Timnit_Gebru/Timnit_Gebru_Blog_post.html",
       "/posts/Penguins/Penguins.html",
+      "/posts/ML_Final_Proj/LinearRegressionRFE.html",
+      "/posts/ML_Final_Proj/RFE.html",
+      "/posts/ML_Final_Proj/RandomForestRegressorAnalysis.html",
       "/posts/perceptron/Perceptron_blog_post.html",
       "/posts/Least-Squares/LeastSquaresBlogPost.html",
+      "/posts/ML_Final_Proj/index.html",
       "/posts/example-blog-post/index.html"
     ]
   }
