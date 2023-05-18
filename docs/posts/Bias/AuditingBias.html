@@ -323,81 +323,109 @@ Name: label, dtype: float64</code></pre>
 </div>
 </div>
 <p>From this, we can see that white males slightly outpace white females, with both being more employed than any other groups. Black females are slightly behind white females, but the big drop is with black males, of whom less than 30% where employed.</p>
-<div class="cell">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>X_train_val <span class="op">=</span> X_train[<span class="dv">43000</span>:]</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>y_train_val <span class="op">=</span> y_train[<span class="dv">43000</span>:]</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> X_train[:<span class="dv">43000</span>]</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span>y_train[:<span class="dv">43000</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> make_pipeline(StandardScaler(), SVC())</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
-<pre><code>0.8434026907328487</code></pre>
+<p>Before we create our model, we can try to tune it, using optional parameters and cross validation. We are tuning the C value of the SVC model, which tweaks how the model determines a hyperplane, with a large C value focusing on properly classifying the most pieces of data, and a low value of C focusing on a hyperplane that has the largest margin between it and the pieces of data, ie, as close to halfway between the sets of points.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>scores <span class="op">=</span>[]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (<span class="dv">10</span>):</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> make_pipeline(StandardScaler(), SVC(C<span class="op">=</span>i<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    model.fit(X_train, y_train)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    scores.append(model.score(X_train_val, y_train_val))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>[0.8425811755034937,
+ 0.8419646526921496,
+ 0.8413481298808055,
+ 0.8417591450883682,
+ 0.8417591450883682,
+ 0.842170160295931,
+ 0.8415536374845869,
+ 0.842170160295931,
+ 0.8415536374845869,
+ 0.8401150842581175]</code></pre>
 </div>
 </div>
-<p>The model has an overall accuracy of 84.34%.</p>
-<div class="cell" data-execution_count="43">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="op">=</span>[]</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>g2 <span class="op">=</span>[]</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (<span class="dv">11967</span>):</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> df.loc[i,<span class="st">"group"</span>] <span class="op">==</span> <span class="dv">1</span>:</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        g1.append(i)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> df.loc[i, <span class="st">"group"</span>]<span class="op">==</span><span class="dv">2</span>:</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        g2.append(i)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="43">
-<pre><code>0.8424336973478939</code></pre>
+<p>When we tune our model, we see that our tuning does very little, but that we get the highest scores with a C value of 6.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> make_pipeline(StandardScaler(), SVC(C<span class="op">=</span><span class="dv">6</span>))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>model.score(X_test, y_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>0.8439040695245258</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="71">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span>model.predict(X_test[g1])</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>g1Matrix <span class="op">=</span> confusion_matrix (y_hat, y_test[g1])</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>g1PPV <span class="op">=</span> g1Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">/</span>(g1Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">+</span>g1Matrix[<span class="dv">1</span>][<span class="dv">0</span>])</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>g1FNR <span class="op">=</span> g1Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">/</span>(g1Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">+</span>g1Matrix[<span class="dv">0</span>][<span class="dv">0</span>])</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>g1FPR <span class="op">=</span> g1Matrix[<span class="dv">0</span>][<span class="dv">1</span>]<span class="op">/</span>(g1Matrix[<span class="dv">1</span>][<span class="dv">1</span>]<span class="op">+</span>g1Matrix[<span class="dv">0</span>][<span class="dv">1</span>])</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>(y_hat <span class="op">==</span> y_test[g1]).mean()</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>g1Matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="71">
-<pre><code>array([[4495,  651],
-       [1066, 4685]])</code></pre>
+<p>The model has an overall accuracy of 84.39%.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="op">=</span>[]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>g2 <span class="op">=</span>[]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span> (<span class="dv">11967</span>):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> df.loc[i,<span class="st">"group"</span>] <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        g1.append(i)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> df.loc[i, <span class="st">"group"</span>]<span class="op">==</span><span class="dv">2</span>:</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        g2.append(i)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span>model.predict(X_test[g1])</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>g1Matrix <span class="op">=</span> confusion_matrix (y_hat, y_test[g1])</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>g1PPV <span class="op">=</span> g1Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">/</span>(g1Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">+</span>g1Matrix[<span class="dv">1</span>][<span class="dv">0</span>])</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>g1FNR <span class="op">=</span> g1Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">/</span>(g1Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">+</span>g1Matrix[<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>g1FPR <span class="op">=</span> g1Matrix[<span class="dv">0</span>][<span class="dv">1</span>]<span class="op">/</span>(g1Matrix[<span class="dv">1</span>][<span class="dv">1</span>]<span class="op">+</span>g1Matrix[<span class="dv">0</span>][<span class="dv">1</span>])</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>(y_hat <span class="op">==</span> y_test[g1]).mean()</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>g1Matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>array([[4494,  653],
+       [1067, 4683]])</code></pre>
 </div>
 </div>
 <p>It has an accuracy of 84.2% for white individuals and 83.9% for black individuals.</p>
-<div class="cell" data-execution_count="72">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span>model.predict(X_test[g2])</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>g2Matrix <span class="op">=</span> confusion_matrix(y_hat, y_test[g2])</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>g2PPV <span class="op">=</span> g2Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">/</span>(g2Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">+</span>g2Matrix[<span class="dv">1</span>][<span class="dv">0</span>])</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>g2FNR <span class="op">=</span> g2Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">/</span>(g2Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">+</span>g2Matrix[<span class="dv">0</span>][<span class="dv">0</span>])</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>g2FPR <span class="op">=</span> g2Matrix[<span class="dv">0</span>][<span class="dv">1</span>]<span class="op">/</span>(g2Matrix[<span class="dv">1</span>][<span class="dv">1</span>]<span class="op">+</span>g2Matrix[<span class="dv">0</span>][<span class="dv">1</span>])</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>(y_hat <span class="op">==</span> y_test[g2]).mean()</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>g2Matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="72">
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span>model.predict(X_test[g2])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>g2Matrix <span class="op">=</span> confusion_matrix(y_hat, y_test[g2])</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>g2PPV <span class="op">=</span> g2Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">/</span>(g2Matrix[<span class="dv">0</span>][<span class="dv">0</span>]<span class="op">+</span>g2Matrix[<span class="dv">1</span>][<span class="dv">0</span>])</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>g2FNR <span class="op">=</span> g2Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">/</span>(g2Matrix[<span class="dv">1</span>][<span class="dv">0</span>]<span class="op">+</span>g2Matrix[<span class="dv">0</span>][<span class="dv">0</span>])</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>g2FPR <span class="op">=</span> g2Matrix[<span class="dv">0</span>][<span class="dv">1</span>]<span class="op">/</span>(g2Matrix[<span class="dv">1</span>][<span class="dv">1</span>]<span class="op">+</span>g2Matrix[<span class="dv">0</span>][<span class="dv">1</span>])</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>(y_hat <span class="op">==</span> y_test[g2]).mean()</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>g2Matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>array([[174,  23],
        [ 43, 171]])</code></pre>
 </div>
 </div>
 <p>The model gives the following PPV, FNR and FPR rates:</p>
-<div class="cell" data-execution_count="70">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The PPV for white individuals is : "</span>,g1PPV)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FNR for white individuals is : "</span>,g1FNR)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FPR for white individuals is : "</span>,g1FPR)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The PPV for black individuals is : "</span>,g2PPV)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FNR for black individuals is : "</span>,g2FNR)</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FPR for black individuals is : "</span>,g2FPR)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The PPV for white individuals is : "</span>,g1PPV)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FNR for white individuals is : "</span>,g1FNR)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FPR for white individuals is : "</span>,g1FPR)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The PPV for black individuals is : "</span>,g2PPV)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FNR for black individuals is : "</span>,g2FNR)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The FPR for black individuals is : "</span>,g2FPR)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The PPV for white individuals is :  0.8083078582988671
-The FNR for white individuals is :  0.19169214170113288
-The FPR for white individuals is :  0.12200149925037482
+<pre><code>The PPV for white individuals is :  0.8081280345261643
+The FNR for white individuals is :  0.19187196547383564
+The FPR for white individuals is :  0.12237631184407796
 The PPV for black individuals is :  0.8018433179723502
-The PPV for black individuals is :  0.19815668202764977
-The PPV for black individuals is :  0.11855670103092783</code></pre>
+The FNR for black individuals is :  0.19815668202764977
+The FPR for black individuals is :  0.11855670103092783</code></pre>
 </div>
 </div>
 <p>This model is calibrated because it doesn’t take into account race, and so given a piece of data, the same score would be returned regardless of which group the individual belonged to. This model also satisfies error rate balance, as the false positive and true negative rates are almost identical across our two groups. This model does not satisfy statistical parity, however, as it predicts that 75% of white people are employed while only predicting 47% of black people are employed.</p>
